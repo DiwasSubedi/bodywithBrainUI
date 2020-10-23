@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-bodywithbrains-dev-131039-authRole",
+      "UnauthRoleArn": "arn:aws:iam::898515654998:role/amplify-bodywithbrains-dev-131039-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::898515654998:role/amplify-bodywithbrains-dev-131039-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-bodywithbrains-dev-131039-deployment",
+      "UnauthRoleName": "amplify-bodywithbrains-dev-131039-unauthRole",
+      "StackName": "amplify-bodywithbrains-dev-131039",
+      "StackId": "arn:aws:cloudformation:us-west-2:898515654998:stack/amplify-bodywithbrains-dev-131039/bb653090-13c8-11eb-99a5-0a54494481e5",
+      "AmplifyAppId": "d35cwl8zzi2xs7"
+    },
+    "categories": {
+      "auth": {
+        "bodywithbrainsf9d751b2": {}
+      }
+    }
+  }
+}

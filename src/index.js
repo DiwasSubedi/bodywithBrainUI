@@ -1,13 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import './index.css';
 import App from './App';
+import App_1 from './App_1';
 import * as serviceWorker from './serviceWorker';
+import "assets/plugins/nucleo/css/nucleo.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "assets/scss/argon-dashboard-react.scss";
 
 ReactDOM.render(
+  
   <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+    <BrowserRouter><App_1 /></BrowserRouter>
+    
+  </React.StrictMode>
+   ,
   document.getElementById('root')
 );
 
