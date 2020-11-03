@@ -8,9 +8,11 @@ import * as serviceWorker from './serviceWorker';
 import "assets/plugins/nucleo/css/nucleo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/scss/argon-dashboard-react.scss";
-
+import Amplify, { Auth } from 'aws-amplify';
+import awsconfig from './aws-exports';
+Amplify.configure(awsconfig);
 ReactDOM.render(
-  
+
   <React.StrictMode>
     <BrowserRouter><App_1 /></BrowserRouter>
     

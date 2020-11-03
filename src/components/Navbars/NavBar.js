@@ -1,173 +1,129 @@
-import React, { memo } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import { Link } from "react-router-dom";
+import classnames from "classnames";
+// reactstrap components
 import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  Hidden,
-  IconButton,
-  withStyles
-} from "@material-ui/core";
-import {
- 
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  UncontrolledDropdown,
+  NavbarBrand,
+  Navbar,
   NavItem,
   NavLink,
   Nav,
-  Progress,
-  Table,
   Container,
   Row,
   Col
 } from "reactstrap";
-
-import MenuIcon from "@material-ui/icons/Menu";
-import HomeIcon from "@material-ui/icons/Home";
-import HowToRegIcon from "@material-ui/icons/HowToReg";
-import LockOpenIcon from "@material-ui/icons/LockOpen";
-import BookIcon from "@material-ui/icons/Book";
-import NavigationDrawer from "components/Headers/NavigationDrawer.js";
-
-
-const styles = theme => ({
-  appBar: {
-    boxShadow: theme.shadows[6],
-    backgroundColor: theme.palette.common.white
-  },
-  toolbar: {
-    display: "flex",
-    justifyContent: "space-between"
-  },
-  menuButtonText: {
-    fontSize: theme.typography.body1.fontSize,
-    fontWeight: theme.typography.h6.fontWeight
-  },
-  brandText: {
-    fontFamily: "'Baloo Bhaijaan', cursive",
-    fontWeight: 400
-  },
-  noDecoration: {
-    textDecoration: "none !important"
+import { Auth } from 'aws-amplify';
+class NavBar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: undefined,
+      loading: true
+    };
   }
-});
 
-function NavBar(props) {
-  const {
-    classes,
-    openRegisterDialog,
-    openLoginDialog,
-    handleMobileDrawerOpen,
-    handleMobileDrawerClose,
-    mobileDrawerOpen,
-    selectedTab
-  } = props;
-  const menuItems = [
-    // {
-    //   link: "/",
-    //   name: "Home",
-    //   icon: <HomeIcon className="text-white" />
-    // },
-    {
-      link: "/",
-      name: "Product",
-      icon: <BookIcon className="text-white" />
-    },
-    {
-      link: "/",
-      name: "Services",
-      icon: <BookIcon className="text-white" />
-    },
-    {
-      link: "/",
-      name: "Latest News",
-      icon: <BookIcon className="text-white" />
-    },
-    {
-      link: "/admin/register",
-      name: "Blog",
-      icon: <BookIcon className="text-white" />
-    },
-    {
-      link: "/auth/Register",
-      name: "Enroll",
-      onClick: openRegisterDialog,
-      icon: <HowToRegIcon className="text-white" />
-    },
-    {
-      link: "/auth/login",
-      name: "Login",
-      onClick: openLoginDialog,
-      icon: <LockOpenIcon className="text-white" />
-    }
-  ];
-  return (
-    <div className={classes.root}>
-      <AppBar position="fixed"  className={"bg-gradient-info"}>
-        <Toolbar className={classes.toolbar}>
-          <div>
-            <Typography
-              variant="h5"
-              className="mb-0 text-black text-uppercase font-weight-bold d-none d-lg-inline-block"
-              display="inline"
-              color="black"
-            >
+  async componentDidMount() {
+    debugger;
+    await Auth.currentAuthenticatedUser().then((user) => {
+      this.setState({
+        loading: false,
+        user: user
+      });
+      console.debug("USerInfo", user);
+    })
+      .catch((exp) => {
+        console.log("Caught", exp);
+        this.setState({
+          loading: false
+        });
+      });
+
+  }
+
+  render() {
+    return (
+      <>
+        <Navbar
+          className="navbar-horizontal navbar-dark bg-gradient-info mt-0 border-bottom-5 border-dark"
+          expand="lg"
+        >
+          <Container className="m-0" fluid={true}>
+            <NavbarBrand href="#pablo" onClick={e => e.preventDefault()}>
               BODYWITHBRAIN
-            </Typography>
-          </div>
-          <div>
-            <Hidden mdUp>
-              <IconButton
-                className={classes.menuButton}
-                onClick={handleMobileDrawerOpen}
-                aria-label="Open Navigation"
-              >
-                <MenuIcon color="#525f7f" />
-              </IconButton>
-            </Hidden>
-            <Hidden smDown>
-              {menuItems.map(element => {
-                if (element.link) {
-                  return (
-                      <Link
-                      key={element.name}
-                      to={element.link}
-                      className={classes.noDecoration}
+            </NavbarBrand>
+            <Nav navbar>
+              <NavItem>
+                <NavLink href="/admin/index">
+                  <i class="fas fa-home text-dark"></i>Home <span className="sr-only">(current)</span>
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink href="/admin/blog">
+                  <i class="fab fa-blogger-b text-dark"></i>Blogs <span className="sr-only">(current)</span>
+                </NavLink>
+              </NavItem>
+              {!this.state.user &&
+                <NavItem>
+                  <NavLink href="/auth/register">
+                    <i class="fas fa-user-plus text-dark" ></i>Sign Up <span className="sr-only">(current)</span>
+                  </NavLink>
+                </NavItem>}
+              {!this.state.user && <NavItem>
+                <NavLink href="/auth/login">
+                  <i class="fas fa-sign-in-alt text-dark"></i>Sign In <span className="sr-only">(current)</span>
+                </NavLink>
+              </NavItem>
+              }
+              {this.state.user &&
+                <NavItem>
+                  <UncontrolledDropdown navbar>
+                    <DropdownToggle nav className="m-0 p-0">
+                      <NavLink>
+                        <i class="fas fa-cog  text-dark"></i> Profile
+                      </NavLink>
+                    </DropdownToggle>
+                    <DropdownMenu
+                      right
                     >
-                      <Button
-                        color="black"
-                        size="large"
-                        classes={{ text: classes.menuButtonText }}
+                      <DropdownItem
+                        href="#pablo"
                       >
-                        {element.name}
-                      </Button>
-                      </Link>
-                  );
-                }
-              })}
-            </Hidden>
-          </div>
-        </Toolbar>
-      </AppBar>
-      {/* <NavigationDrawer
-        menuItems={menuItems}
-        anchor="right"
-        open={mobileDrawerOpen}
-        selectedItem={selectedTab}
-        onClose={handleMobileDrawerClose}
-      /> */}
-    </div>
-  );
+                        My Profile
+                    </DropdownItem>
+                      <DropdownItem
+                        href="#pablo"
+                      >
+                        Subscriptions
+                    </DropdownItem>
+                      <DropdownItem
+                        href="#pablo"
+                      >
+                        My Blogs
+                    </DropdownItem>
+                      <DropdownItem
+                        href="/admin/index" onClick={e => {
+                          Auth.signOut().then(() => {
+                            this.props.history.push("/")
+                          })
+
+                        }}>
+
+                        Sign Out
+                    </DropdownItem>
+                    </DropdownMenu>
+                  </UncontrolledDropdown>
+                </NavItem>}
+            </Nav>
+
+          </Container>
+        </Navbar>
+      </>
+    );
+  }
 }
 
-NavBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-  handleMobileDrawerOpen: PropTypes.func,
-  handleMobileDrawerClose: PropTypes.func,
-  mobileDrawerOpen: PropTypes.bool,
-  selectedTab: PropTypes.string,
-  openRegisterDialog: PropTypes.func.isRequired,
-  openLoginDialog: PropTypes.func.isRequired
-};
-
-export default withStyles(styles, { withTheme: true })(memo(NavBar));
+export default NavBar;

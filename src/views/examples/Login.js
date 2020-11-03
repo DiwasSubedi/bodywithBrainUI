@@ -122,7 +122,7 @@ setFocusEmail(){
     return (
       <>
         <Col lg="6" md="8">
-          <Card className=" shadow border-0" style={{ backgroundColor: '#e7fbfe', borderColor: '#FFFFF' }}>
+          <Card className=" shadow border-0" style={{ backgroundColor: 'rgb(37 50 120)', borderColor: '#FFFFF' }}>
             <CardHeader className="bg-transparent pb-5">
               <div className="text-muted text-center mt-2 mb-3">
                 <small>Sign in with</small>
