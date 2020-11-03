@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import './index.css';
-import App from './App';
+
 import App_1 from './App_1';
 import * as serviceWorker from './serviceWorker';
 import "assets/plugins/nucleo/css/nucleo.css";

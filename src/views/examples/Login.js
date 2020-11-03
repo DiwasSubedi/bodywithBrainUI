@@ -17,6 +17,7 @@
 */
 import { Auth } from 'aws-amplify';
 import React from "react";
+import "views/css/common.css";
 
 // reactstrap components
 import {
@@ -36,18 +37,20 @@ import {
 } from "reactstrap";
 
 class Login extends React.Component {
+  let ;
   constructor(props) {
     super(props);
         this.state = {
             email: '',
             password: '',
             serverError: false,
-            serverMessage:''
+            serverMessage:'',
+            myInp:null
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.toggleServerError = this.toggleServerError.bind(this);
-       
+        this.setFocusEmail = this.setFocusEmail.bind(this);
         this.isValid = this.isValid.bind(this)
 
   }
@@ -97,7 +100,9 @@ toggleServerError(){
     serverError:true,
   }); 
 }
-
+setFocusEmail(){
+  this.myInp.focus();
+}
 
   componentDidMount() {
   }
@@ -176,26 +181,15 @@ toggleServerError(){
                   <strong>Error!</strong> {this.state.serverMessage}
                 </span>
               </UncontrolledAlert>
+              
               <Form role="form">
+              <Input type="hidden" value="prayer" />
                 <FormGroup className="mb-3">
-                  <InputGroup className="input-group-alternative">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="ni ni-email-83" />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input placeholder="Email" type="email" name="email" value={this.state.email} onChange={this.handleInputChange} autoComplete="new-email"/>
-                  </InputGroup>
-                </FormGroup>
+                    <Input placeholder="Email" type="email" name="email" value={this.state.email} onChange={this.handleInputChange} />
+               </FormGroup>
                 <FormGroup>
-                  <InputGroup className="input-group-alternative">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="ni ni-lock-circle-open" />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input placeholder="Password" type="password"  name="password" value={this.state.password} onChange={this.handleInputChange} autoComplete="new-password"/>
-                  </InputGroup>
+                     <Input  placeholder="Password" type="password"  name="password" value={this.state.password} onChange={this.handleInputChange} />
+                  
                 </FormGroup>
                
                 <div className="text-center">

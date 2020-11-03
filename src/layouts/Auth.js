@@ -23,7 +23,7 @@ import { Container, Row, Col } from "reactstrap";
 // core components
 import AuthNavbar from "components/Navbars/AuthNavbar.js";
 import AuthFooter from "components/Footers/AuthFooter.js";
-
+import NavBar from "components/Navbars/NavBar";
 import routes from "routes.js";
 
 class Auth extends React.Component {
@@ -52,7 +52,14 @@ class Auth extends React.Component {
     return (
       <>
         <div className="main-content">
-          <AuthNavbar />
+         {/*<AuthNavbar />*/}
+          
+          <NavBar
+            selectedTab={"Home"}
+            selectTab={null}
+            mobileDrawerOpen={true}
+           
+          />
           <div className="header bg-gradient-info py-7 py-lg-8">
             <Container>
               <div className="header-body text-center mb-7">

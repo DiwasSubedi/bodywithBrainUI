@@ -23,7 +23,7 @@ import { Container } from "reactstrap";
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
-
+import NavBar from "components/Navbars/NavBar";
 import routes from "routes.js";
 
 class Admin extends React.Component {
@@ -62,20 +62,13 @@ class Admin extends React.Component {
   render() {
     return (
       <>
-        <Sidebar
-          {...this.props}
-          routes={routes}
-          logo={{
-            innerLink: "/admin/index",
-            imgSrc: require("assets/img/brand/bodywithBrainsicon.png"),
-            imgAlt: "..."
-          }}
-        />
+     
         <div className="main-content" ref="mainContent">
-          <AdminNavbar
+          {/*<AdminNavbar
             {...this.props}
             brandText={this.getBrandText(this.props.location.pathname)}
-          />
+          />*/}
+          <NavBar></NavBar>
           <Switch>
             {this.getRoutes(routes)}
             <Redirect from="*" to="/admin/index" />
