@@ -63,10 +63,25 @@ function NavBar(props) {
     selectedTab
   } = props;
   const menuItems = [
+    // {
+    //   link: "/",
+    //   name: "Home",
+    //   icon: <HomeIcon className="text-white" />
+    // },
     {
       link: "/",
-      name: "Home",
-      icon: <HomeIcon className="text-white" />
+      name: "Product",
+      icon: <BookIcon className="text-white" />
+    },
+    {
+      link: "/",
+      name: "Services",
+      icon: <BookIcon className="text-white" />
+    },
+    {
+      link: "/",
+      name: "Latest News",
+      icon: <BookIcon className="text-white" />
     },
     {
       link: "/admin/register",
@@ -75,7 +90,7 @@ function NavBar(props) {
     },
     {
       link: "/auth/Register",
-      name: "Register",
+      name: "Enroll",
       onClick: openRegisterDialog,
       icon: <HowToRegIcon className="text-white" />
     },
