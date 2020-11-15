@@ -36,15 +36,17 @@ import {
 // core components
 import Header from "components/Headers/Header.js";
 import BlogCard from "./BlogCards";
+import { Redirect } from "react-router-dom";
 
 class Blog extends React.Component {
   state = {};
 constructor(props){
   super(props);
+  this.state = {
+    createNew: false
+  }
+
   this.getAllBlogs = this.getAllBlogs.bind(this);
- 
-  this.test = this.test.bind(this);
- 
 } 
   getAllBlogs(){
       var threeBlogArray = [];
@@ -68,14 +70,6 @@ constructor(props){
      return returnList;
   }
 
-  
-
-test(){
-  return(
-      <div>dksajdjasdjasjdoiasjdioasjd</div>
-  );
-}
-
   render() {
     return (
       <>
@@ -83,7 +77,7 @@ test(){
         {/* Page content */}
         <Container className=" mt--7 bg-gradient-info" fluid>
           {/* Table */}
-          <Row ><Col><h3>&nbsp;&nbsp;BODYWITHBRAIN BLOGS</h3></Col></Row>
+          <Row ><Col><h3>&nbsp;&nbsp;BODYWITHBRAIN BLOGS</h3></Col><Col><Button type="button" onClick={()=>{this.props.history.push("/admin/blog/new");}} className="float-right mb-2" color="default"><span><i class="fas fa-edit"></i>&nbsp;Create Blog</span></Button></Col></Row>
           <Row>
 
             <div className=" col">

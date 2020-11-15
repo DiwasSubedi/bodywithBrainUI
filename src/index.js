@@ -8,9 +8,17 @@ import * as serviceWorker from './serviceWorker';
 import "assets/plugins/nucleo/css/nucleo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/scss/argon-dashboard-react.scss";
-import Amplify, { Auth } from 'aws-amplify';
+import Amplify, { Auth,Storage } from 'aws-amplify';
 import awsconfig from './aws-exports';
 Amplify.configure(awsconfig);
+Amplify.configure({
+  Storage: {
+      AWSS3: {
+          bucket: 'bodywithbrain-blog-images', //REQUIRED -  Amazon S3 bucket name
+          region: 'us-west-2', //OPTIONAL -  Amazon service region
+      }
+  }
+});
 ReactDOM.render(
 
   <React.StrictMode>

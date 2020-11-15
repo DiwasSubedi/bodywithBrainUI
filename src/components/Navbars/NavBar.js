@@ -62,7 +62,7 @@ class NavBar extends React.Component {
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="/admin/blog">
+                <NavLink href="/admin/blog/all">
                   <i class="fab fa-blogger-b text-dark"></i>Blogs <span className="sr-only">(current)</span>
                 </NavLink>
               </NavItem>

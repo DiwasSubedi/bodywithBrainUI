@@ -23,6 +23,7 @@ import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
 import Blog from "views/blogs/Blog.js";
+import CreateBlog from "views/blogs/CreateBlog.js"
 var routes = [
   {
     path: "/index",
@@ -74,10 +75,17 @@ var routes = [
     layout: "/auth"
   },
   {
-    path: "/blog",
+    path: "/blog/all",
     name: "Blog",
     icon: "ni ni-books",
     component: Blog,
+    layout: "/admin"
+  },
+  {
+    path: "/blog/new",
+    name: "CreateBlog",
+    icon: "ni ni-books",
+    component: CreateBlog,
     layout: "/admin"
   }
 ];
