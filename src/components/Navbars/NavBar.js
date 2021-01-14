@@ -17,6 +17,8 @@ import {
   Col
 } from "reactstrap";
 import { Auth } from 'aws-amplify';
+import fulllogo from "../../assets/img/brand/PNG2.png"
+import fulllogo1 from "../../assets/img/brand/PNG3.png"
 class NavBar extends React.Component {
   constructor(props) {
     super(props);
@@ -53,17 +55,20 @@ class NavBar extends React.Component {
         >
           <Container className="m-0" fluid={true}>
             <NavbarBrand href="#pablo" onClick={e => e.preventDefault()}>
-              BODYWITHBRAIN
+              <img style={{height:"100px"}} src={fulllogo}></img>
+              &nbsp;
+              &nbsp;
+              <img style={{height:"20px"}} src={fulllogo1}></img>
             </NavbarBrand>
             <Nav navbar>
               <NavItem>
-                <NavLink href="/admin/index">
-                  <i class="fas fa-home text-dark"></i>Home <span className="sr-only">(current)</span>
+                <NavLink href="/admin/blog/all">
+                  <i class="fab fa-blogger-b text-dark"></i>Blogs <span className="sr-only">(current)</span>
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="/admin/blog/all">
-                  <i class="fab fa-blogger-b text-dark"></i>Blogs <span className="sr-only">(current)</span>
+                <NavLink href="/admin/index">
+                  <i class="fa fa-wrench text-dark"></i>Tools <span className="sr-only">(current)</span>
                 </NavLink>
               </NavItem>
               {!this.state.user &&

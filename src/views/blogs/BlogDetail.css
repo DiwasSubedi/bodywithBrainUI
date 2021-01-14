@@ -1,0 +1,22 @@
+.img-custom {
+    max-width: 100%;
+    height: auto;
+    width: 100%;
+}
+    
+blockquote {
+    border-left: 4px solid #ccc;
+    margin-bottom: 5px !important;
+    margin-top: 5px !important ;
+    padding-left: 16px;
+    font-style: italic; 
+}
+
+strong {
+    font-weight: 600 !important;
+}
+
+
+#toolbar-container .ql-color .ql-color-label.ql-stroke {
+    stroke: #00ff00;
+  }

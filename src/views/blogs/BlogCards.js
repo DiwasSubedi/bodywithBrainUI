@@ -19,6 +19,8 @@ import React, { useState } from "react";
 // react component that copies the given text inside your clipboard
 import { CopyToClipboard } from "react-copy-to-clipboard";
 // reactstrap components
+import { CSSTransition } from 'react-transition-group';
+import "./BlogCard.css"
 import {
     Card,
     CardHeader,
@@ -40,6 +42,9 @@ class BlogCard extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            show:false
+        }
         this.getCards = this.getCards.bind(this);
     }
   
@@ -51,7 +56,8 @@ class BlogCard extends React.Component {
             console.log(blog);
             return (
                 <>
-                    <Card className="bg-white text-dark border-0 p-1">
+
+                         <Card className="bg-white text-dark border-0 p-1 bwbblogcard">
                         <CardImg
                             alt="..."
                             src={blog.pictureUrl}
@@ -63,7 +69,7 @@ class BlogCard extends React.Component {
                             <CardTitle className=" h5 mb-0"><a href="">{blog.category.join(" / ")}</a></CardTitle>
 
                             <small className=" text-muted">
-                                by {blog.creadedBy} on {new Date(blog.createdOn).toDateString()}
+                                by {blog.creadedBy} on {new Date(blog.lastUpdated).toDateString()}
                             </small>
                             <CardText className=" mt-4">
                                 {/* <div dangerouslySetInnerHTML={{ __html: blog.content.substring(0, 400) }} />
@@ -88,21 +94,24 @@ class BlogCard extends React.Component {
                   </Button>
                         </CardBody>
                     </Card>
+
                     <br />
+
                 </>
 
             )
         })
-        debugger;
         return returnCards;
     }
 
     render() {
         return (
             <>
-                <div className=" card-deck mb-5">
-                    {this.getCards()}
-                </div>
+
+                    <div className=" card-deck mb-5">
+                        {this.getCards()}
+                    </div>
+
             </>
         );
     }

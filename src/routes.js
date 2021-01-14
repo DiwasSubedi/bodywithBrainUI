@@ -24,6 +24,8 @@ import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
 import Blog from "views/blogs/Blog.js";
 import CreateBlog from "views/blogs/CreateBlog.js"
+import BlogDetail from "views/blogs/BlogDetail";
+import bmr from "./views/bmr/bmr";
 var routes = [
   {
     path: "/index",
@@ -87,6 +89,21 @@ var routes = [
     icon: "ni ni-books",
     component: CreateBlog,
     layout: "/admin"
+  },
+  {
+    path: "/blog/detail",
+    name: "BlogDetail",
+    icon: "ni ni-books",
+    component: BlogDetail,
+    layout: "/admin"
+  },
+  {
+    path: "/bmr",
+    name: "BMR Calculator",
+    component: bmr,
+    layout: "/admin"
   }
+
+ 
 ];
 export default routes;

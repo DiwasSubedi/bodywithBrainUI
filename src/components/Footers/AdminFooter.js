@@ -19,66 +19,40 @@
 import React from "react";
 
 // reactstrap components
-import { Container, Row, Col, Nav, NavItem, NavLink } from "reactstrap";
+import {Container, Row, Col, Nav, NavItem, NavLink, NavbarBrand} from "reactstrap";
+import fulllogo from "../../assets/img/brand/PNG3.png";
 
 class Footer extends React.Component {
   render() {
     return (
-      <footer className="footer">
+      <footer className="footer pt-2 pb-2">
         <Row className="align-items-center justify-content-xl-between">
           <Col xl="6">
             <div className="copyright text-center text-xl-left text-muted">
-              © 2018{" "}
+              <span> © 2020 &nbsp;&nbsp;</span>
               <a
                 className="font-weight-bold ml-1"
-                href="https://www.creative-tim.com?ref=adr-admin-footer"
+                href="https://www.google.com"
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Creative Tim
+
+                <img className={"text-center"} style={{height:"15px",paddingBottom:"3px"}} src={fulllogo}></img>
               </a>
             </div>
           </Col>
 
           <Col xl="6">
             <Nav className="nav-footer justify-content-center justify-content-xl-end">
-              <NavItem>
-                <NavLink
-                  href="https://www.creative-tim.com?ref=adr-admin-footer"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Creative Tim
-                </NavLink>
-              </NavItem>
+
 
               <NavItem>
                 <NavLink
-                  href="https://www.creative-tim.com/presentation?ref=adr-admin-footer"
+                  href="https://www.google.com/maps/place/14810+E+40th+Pl,+Tulsa,+OK+74134/@36.1050328,-95.8137116,17z/data=!3m1!4b1!4m5!3m4!1s0x87b68b5edf1e382b:0x68359b4a5b8b38b1!8m2!3d36.1050328!4d-95.8115229"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  About Us
-                </NavLink>
-              </NavItem>
-
-              <NavItem>
-                <NavLink
-                  href="http://blog.creative-tim.com?ref=adr-admin-footer"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Blog
-                </NavLink>
-              </NavItem>
-
-              <NavItem>
-                <NavLink
-                  href="https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md?ref=adr-admin-footer"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  MIT License
+                 Contact Us
                 </NavLink>
               </NavItem>
             </Nav>

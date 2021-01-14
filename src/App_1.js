@@ -37,7 +37,7 @@ class App extends Component {
                         <Switch>
                             <Route path="/admin" render={props => <AdminLayout {...props} />} />
                             <Route path="/auth" render={props => <AuthLayout {...props} />} />
-                            <Redirect from="/" to="/admin/index" />
+                            <Redirect from="/" to="/admin/blog/all" />
                         </Switch>
                     </div>
                     <Alert stack={{limit: 3}}
