@@ -125,7 +125,7 @@ submitBlog(){
                 <Button type="button" onClick={this.submitBlog} className="float-right mt-5 mb-2" color="default"><span><i class="fas fa-ok"></i>&nbsp;Submit</span></Button>
 
                 <h1></h1>
-                npm start >
+               
               
             </div>
             <div className="col-1"></div>

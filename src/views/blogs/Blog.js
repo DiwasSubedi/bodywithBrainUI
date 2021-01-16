@@ -66,6 +66,7 @@ class Blog extends React.Component {
                 let copyOfThreeBlog = Array.from(threeBlog)
                 threeBlogArray.push(copyOfThreeBlog);
                 threeBlog.length = 0;
+                threeBlog.push(blog)
             } else {
                 threeBlog.push(blog)
             }
