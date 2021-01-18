@@ -20,13 +20,13 @@ import { Auth } from 'aws-amplify';
 import fulllogo from "../../assets/img/brand/PNG2.png"
 import fulllogo1 from "../../assets/img/brand/PNG3.png"
 class NavBar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      user: undefined,
-      loading: true
-    };
-  }
+	constructor(props) {
+		super(props);
+		this.state = {
+			user: undefined,
+			loading: true,
+		};
+	}
 
   async componentDidMount() {
     debugger;
