@@ -1,96 +1,298 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-import React from "react";
-
+import React, { Component } from 'react';
 import {
-    Card,
-    CardHeader,
-    CardBody,
-    Container,
-    Row,
-    Col,
-    UncontrolledTooltip,
-    CardImg,
-    CardTitle,
-    CardText,
-    Button
-} from "reactstrap";
-import Header from "components/Headers/Header.js";
-import Form from "reactstrap/es/Form";
+	Alert,
+	Button,
+	Row,
+	Card,
+	CardBody,
+	CardTitle,
+	CardSubtitle,
+	Col,
+	Container,
+	FormGroup,
+	FormFeedback,
+	FormText,
+	Input,
+	Label,
+} from 'reactstrap';
+import Header from 'components/Headers/Header.js';
+import Form from 'reactstrap/es/Form';
+import Joi from 'joi-browser';
+import { ErrorSection } from 'aws-amplify-react';
+class Bmr extends Component {
+	state = {
+		user: { age: '', height: '', weight: '', gender: '' },
+		unit: { US: true, metric: false },
+		result: { bmr: '' },
+		errors: {},
+	};
+	schema = {
+		age: Joi.number().min(0).required().label('Age'),
+		gender: Joi.string().required().label('Gender'),
+		height: Joi.number().min(0).required().label('Height'),
+		height_ft: Joi.number().min(0).required().label('Height in feet'),
+		height_in: Joi.number().min(0).max(12).required().label('Height in inches'),
+		weight: Joi.number().min(0).required().label('Weight'),
+		weight_pd: Joi.number().min(0).required().label('Weight'),
+	};
+	validate = () => {
+		const options = { abortEarly: false };
 
-class bmr extends React.Component {
-    state = {};
+		const { error } = Joi.validate(this.state.user, this.schema, options);
 
-    constructor(props) {
-        super(props);
-        this.state = {
+		if (!error) return null;
 
-        }
+		const errors = {};
+		for (let item of error.details) errors[item.path[0]] = item.message;
+		return errors;
+	};
 
+	validateProperty = ({ name, value }) => {
+		const obj = { [name]: value };
+		const schema = { [name]: this.schema[name] };
+		const { error } = Joi.validate(obj, schema);
 
-    }
+		return error ? error.details[0].message : null;
+	};
 
+	calculateBMR = () => {
+		const { gender, weight, height, age } = this.state.user;
 
+		var bmr;
+		if (gender === 'M') {
+			bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+		} else if (gender === 'F') {
+			bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+		}
+		return bmr;
+	};
 
-    async componentDidMount() {
+	handleSubmit = (e) => {
+		e.preventDefault();
 
-    }
+		const { result } = this.state;
+		const errors = this.validate();
 
+		this.setState({ errors: errors || {} });
+		if (errors) return;
 
-    render() {
-        return (
-            <>
-                <Header/>
-                <Container className="mt--7 bg-gradient-info container-fluid" fluid>
-                    <Row><Col><h3>&nbsp;&nbsp;BMR CALCULATOR</h3></Col><Col></Col></Row>
-                    <Row className={"mt-5"}>
-                        <div className=" col-1"></div>
-                        <div className=" col">
-                            {/* <h1>{this.props.location.state.title}</h1> */}
-                            <Card className="bg-white text-dark border-0 p-1">
-                                <CardBody>
-                                    <Row >
-                                        <p  style={{border:"2px solid black",borderRadius:"10px",padding:"10px"}}><strong>Basal Metabolic Rate</strong> is the amount of energy per unit of time that a person needs to keep the body functioning at rest. Some of those processes are breathing, blood circulation, controlling body temperature, cell growth, brain and nerve function, and contraction of muscles. </p>
-                                    </Row>
-                                    <br/>
-                                    <br/>
-                                    <Row>
-                                        <Col>
-                                            <Form>
+		result.bmr = this.calculateBMR();
+		this.setState({ result });
+	};
 
-                                            </Form>
-                                            <Button type="button"  className="float-right mt-5 mb-2" color="default"><span><i class="fas fa-ok"></i>&nbsp;Calculate</span></Button>
-                                        </Col>
-                                        <Col>
-                                            
-                                        </Col>
-                                    </Row>
-                                </CardBody>
-                            </Card>
+	handleChange = ({ currentTarget: input }) => {
+		const errors = { ...this.state.errors };
+		const errorMessage = this.validateProperty(input);
+		if (errorMessage) errors[input.name] = errorMessage;
+		else delete errors[input.name];
 
-                            <h1></h1>
-                        </div>
-                        <div className="col-1"></div>
-                    </Row>
-                </Container>
-            </>
-        );
-    }
+		const user = { ...this.state.user };
+		user[input.name] = input.value;
+
+		if (user.height_ft || user.height_in) {
+			// converting the ft-in height to cm
+			user.height = user.height_ft * 30.48 + user.height_in * 2.54;
+		}
+		if (user.weight_pd) {
+			user.weight = user.weight_pd / 2.205;
+		}
+
+		this.setState({ user, errors });
+	};
+
+	handleUnitChange = (param) => {
+		this.handleClear();
+		const { unit, user } = this.state;
+
+		if (param === 'US') {
+			unit.US = true;
+			unit.metric = false;
+		} else {
+			unit.US = false;
+			unit.metric = true;
+			user.height_ft = 0;
+			user.height_in = 0;
+			user.weight_pd = 0;
+		}
+
+		this.setState({ unit, user });
+	};
+	handleClear = () => {
+		const user = { age: '', height: '', weight: '', gender: '', height_ft: '', height_in: '', weight_pd: '' };
+		const result = { bmr: '' };
+		this.setState({ user, result });
+	};
+	render() {
+		const { user, unit, errors, result } = this.state;
+		return (
+			<>
+				<Header />
+				<Container className='themed-container' fluid='sm'>
+					<Row>
+						<Button color='primary' active onClick={() => this.handleUnitChange('US')}>
+							US Units
+						</Button>{' '}
+						<Button color='primary' active onClick={() => this.handleUnitChange('Metric')}>
+							Metric Units
+						</Button>{' '}
+					</Row>
+					<Row>
+						<Col sm={8}>
+							<Form>
+								<Row form>
+									<Col sm={8}>
+										<FormGroup>
+											<Label htmlFor='age'>Age</Label>
+											<Input
+												id='age'
+												name='age'
+												value={user.age}
+												onChange={this.handleChange}
+												type='number'
+											/>
+											{errors.age && <Alert color='warning'>{errors.age}</Alert>}
+										</FormGroup>
+										<FormGroup tag='fieldset'>
+											<Label htmlFor='gender'>Gender</Label>{' '}
+											<FormGroup check inline>
+												<Label check>
+													<Input
+														type='radio'
+														value='M'
+														name='gender'
+														checked={user.gender === 'M'}
+														onChange={this.handleChange}
+													/>{' '}
+													Male
+												</Label>
+											</FormGroup>
+											<FormGroup check inline>
+												<Label check>
+													<Input
+														type='radio'
+														value='F'
+														name='gender'
+														checked={user.gender === 'F'}
+														onChange={this.handleChange}
+													/>{' '}
+													Female
+												</Label>
+											</FormGroup>{' '}
+											{errors.gender && <Alert color='warning'>{errors.gender}</Alert>}
+										</FormGroup>
+									</Col>
+								</Row>
+								{unit.US && (
+									<>
+										<Row form>
+											<Col md={6}>
+												<FormGroup inline>
+													<Label htmlFor='Height'>Height</Label>
+
+													<Input
+														id='Height'
+														name='height_ft'
+														value={user.height_ft}
+														onChange={this.handleChange}
+														type='number'
+														placeHolder='feet'
+													/>
+													{errors.height_ft && (
+														<Alert color='warning'>{errors.height_ft}</Alert>
+													)}
+												</FormGroup>
+
+												<FormGroup inline>
+													<Input
+														id='Height'
+														name='height_in'
+														value={user.height_in}
+														onChange={this.handleChange}
+														type='number'
+														placeHolder='inches'
+													/>
+													{errors.height_in && (
+														<Alert color='warning'>{errors.height_in}</Alert>
+													)}
+												</FormGroup>
+
+												<FormGroup inline>
+													<Label htmlFor='weight'>Weight</Label>
+
+													<Input
+														id='weight'
+														name='weight_pd'
+														value={user.weight_pd}
+														onChange={this.handleChange}
+														type='number'
+														placeHolder='pounds'
+													/>
+													{errors.weight_pd && (
+														<Alert color='warning'>{errors.weight_pd}</Alert>
+													)}
+												</FormGroup>
+											</Col>
+										</Row>
+									</>
+								)}
+								{unit.metric && (
+									<>
+										<Row form>
+											<Col md={6}>
+												<FormGroup inline>
+													<Label htmlFor='Height'>Height</Label>
+
+													<Input
+														id='Height'
+														name='height'
+														value={user.height}
+														onChange={this.handleChange}
+														type='number'
+														placeHolder='cm'
+													/>
+													{errors.height && <Alert color='warning'>{errors.height}</Alert>}
+												</FormGroup>
+
+												<FormGroup inline>
+													<Label htmlFor='weight'>Weight</Label>
+
+													<Input
+														id='weight'
+														name='weight'
+														value={user.weight}
+														onChange={this.handleChange}
+														type='number'
+														placeHolder='kg'
+													/>
+													{errors.weight && <Alert color='warning'>{errors.weight}</Alert>}
+												</FormGroup>
+											</Col>
+										</Row>
+									</>
+								)}
+								<Button onClick={this.handleClear}>Clear</Button>
+								<Button color='primary' onClick={this.handleSubmit}>
+									Submit
+								</Button>
+							</Form>
+						</Col>
+						<Col sm={4}>
+							{result.bmr && (
+								<Card>
+									<CardBody>
+										<CardTitle tag='h5'>Your BMR is</CardTitle>
+										<CardSubtitle tag='h6' className='mb-2 text-muted'>
+											BMR = {result.bmr} Calories/Day
+										</CardSubtitle>
+									</CardBody>
+								</Card>
+							)}
+						</Col>
+					</Row>
+				</Container>
+			</>
+		);
+	}
 }
 
-export default bmr;
+export default Bmr;
