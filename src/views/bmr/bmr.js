@@ -92,10 +92,10 @@ class Bmr extends Component {
 
 		if (user.height_ft || user.height_in) {
 			// converting the ft-in height to cm
-			user.height = user.height_ft * 30.48 + user.height_in * 2.54;
+			user.height = (user.height_ft * 30.48 + user.height_in * 2.54).toFixed(2);
 		}
 		if (user.weight_pd) {
-			user.weight = user.weight_pd / 2.205;
+			user.weight = (user.weight_pd / 2.205).toFixed(2);
 		}
 
 		this.setState({ user, errors });
@@ -107,15 +107,24 @@ class Bmr extends Component {
 		if (param === 'US') {
 			unit.US = true;
 			unit.metric = false;
+			delete [user.height_ft, user.height_in, user.weight_pd];
+			if (user.height) {
+				const length = user.height / 2.54;
+				user.height_ft = Math.floor(length / 12);
+				user.height_in = Math.round(length - 12 * user.height_ft);
+			}
+			if (user.weight) {
+				user.weight_pd = Math.round(user.weight * 2.205);
+			}
 		} else {
 			unit.US = false;
 			unit.metric = true;
-			// user.height_ft = 0;
-			// user.height_in = 0;
-			// user.weight_pd = 0;
+			user.height_ft = 0;
+			user.height_in = 0;
+			user.weight_pd = 0;
 		}
-		this.handleClear();
-		this.setState({ unit });
+
+		this.setState({ unit, user });
 	};
 	handleClear = () => {
 		const user = { age: '', height: '', weight: '', gender: '', height_ft: '', height_in: '', weight_pd: '' };
