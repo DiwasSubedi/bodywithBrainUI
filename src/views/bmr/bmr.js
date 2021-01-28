@@ -5,6 +5,7 @@ import {
 	Row,
 	Card,
 	CardBody,
+	CardHeader,
 	CardTitle,
 	CardSubtitle,
 	Col,
@@ -64,7 +65,7 @@ class Bmr extends Component {
 		} else if (gender === 'F') {
 			bmr = 10 * weight + 6.25 * height - 5 * age - 161;
 		}
-		return bmr;
+		return Math.ceil(bmr);
 	};
 
 	handleSubmit = (e) => {
@@ -91,22 +92,30 @@ class Bmr extends Component {
 
 		if (user.height_ft || user.height_in) {
 			// converting the ft-in height to cm
-			user.height = user.height_ft * 30.48 + user.height_in * 2.54;
+			user.height = (user.height_ft * 30.48 + user.height_in * 2.54).toFixed(2);
 		}
 		if (user.weight_pd) {
-			user.weight = user.weight_pd / 2.205;
+			user.weight = (user.weight_pd / 2.205).toFixed(2);
 		}
 
 		this.setState({ user, errors });
 	};
 
 	handleUnitChange = (param) => {
-		this.handleClear();
 		const { unit, user } = this.state;
 
 		if (param === 'US') {
 			unit.US = true;
 			unit.metric = false;
+			delete [user.height_ft, user.height_in, user.weight_pd];
+			if (user.height) {
+				const length = user.height / 2.54;
+				user.height_ft = Math.floor(length / 12);
+				user.height_in = Math.round(length - 12 * user.height_ft);
+			}
+			if (user.weight) {
+				user.weight_pd = Math.round(user.weight * 2.205);
+			}
 		} else {
 			unit.US = false;
 			unit.metric = true;
@@ -127,166 +136,188 @@ class Bmr extends Component {
 		return (
 			<>
 				<Header />
-				<Container className='themed-container' fluid='sm'>
-					<Row>
-						<Button color='primary' active onClick={() => this.handleUnitChange('US')}>
-							US Units
-						</Button>{' '}
-						<Button color='primary' active onClick={() => this.handleUnitChange('Metric')}>
-							Metric Units
-						</Button>{' '}
-					</Row>
-					<Row>
-						<Col sm={8}>
-							<Form>
-								<Row form>
-									<Col sm={8}>
-										<FormGroup>
-											<Label htmlFor='age'>Age</Label>
-											<Input
-												id='age'
-												name='age'
-												value={user.age}
-												onChange={this.handleChange}
-												type='number'
-											/>
-											{errors.age && <Alert color='warning'>{errors.age}</Alert>}
-										</FormGroup>
-										<FormGroup tag='fieldset'>
-											<Label htmlFor='gender'>Gender</Label>{' '}
-											<FormGroup check inline>
-												<Label check>
-													<Input
-														type='radio'
-														value='M'
-														name='gender'
-														checked={user.gender === 'M'}
-														onChange={this.handleChange}
-													/>{' '}
-													Male
-												</Label>
-											</FormGroup>
-											<FormGroup check inline>
-												<Label check>
-													<Input
-														type='radio'
-														value='F'
-														name='gender'
-														checked={user.gender === 'F'}
-														onChange={this.handleChange}
-													/>{' '}
-													Female
-												</Label>
-											</FormGroup>{' '}
-											{errors.gender && <Alert color='warning'>{errors.gender}</Alert>}
-										</FormGroup>
-									</Col>
-								</Row>
-								{unit.US && (
-									<>
+				<Container className=' mt--7 bg-gradient-info' fluid>
+					<Row className='justify-content-center'>
+						<Col lg='6' md='8'>
+							<Card
+								className=' bg-white text-dark border-0 p-1 shadow '
+								style={{ backgroundColor: 'rgb(37 50 120)', borderColor: '#FFFFF' }}
+							>
+								<CardHeader className='bg-transparent pb-5'>
+									<div className='text-muted text-center mt-2 mb-3'>
+										<h1>Calculate your BMR</h1>
+									</div>
+									<div className='btn-wrapper text-center'>
+										<Button
+											color='primary'
+											onClick={() => this.handleUnitChange('US')}
+											className='btn-neutral btn-icon'
+										>
+											US Units
+										</Button>{' '}
+										<Button
+											color='primary'
+											onClick={() => this.handleUnitChange('Metric')}
+											className='btn-neutral btn-icon'
+										>
+											Metric Units
+										</Button>{' '}
+									</div>
+								</CardHeader>
+								<CardBody className='px-lg-5 py-lg-5'>
+									<Form>
 										<Row form>
 											<Col md={6}>
 												<FormGroup inline>
-													<Label htmlFor='Height'>Height</Label>
-
+													<Label htmlFor='age'>Age</Label>
 													<Input
-														id='Height'
-														name='height_ft'
-														value={user.height_ft}
+														id='age'
+														name='age'
+														value={user.age}
 														onChange={this.handleChange}
 														type='number'
-														placeHolder='feet'
 													/>
-													{errors.height_ft && (
-														<Alert color='warning'>{errors.height_ft}</Alert>
-													)}
+													{errors.age && <Alert color='warning'>{errors.age}</Alert>}
 												</FormGroup>
 
-												<FormGroup inline>
-													<Input
-														id='Height'
-														name='height_in'
-														value={user.height_in}
-														onChange={this.handleChange}
-														type='number'
-														placeHolder='inches'
-													/>
-													{errors.height_in && (
-														<Alert color='warning'>{errors.height_in}</Alert>
-													)}
-												</FormGroup>
-
-												<FormGroup inline>
-													<Label htmlFor='weight'>Weight</Label>
-
-													<Input
-														id='weight'
-														name='weight_pd'
-														value={user.weight_pd}
-														onChange={this.handleChange}
-														type='number'
-														placeHolder='pounds'
-													/>
-													{errors.weight_pd && (
-														<Alert color='warning'>{errors.weight_pd}</Alert>
-													)}
+												<FormGroup tag='fieldset'>
+													<Label htmlFor='gender'>Gender</Label>{' '}
+													<FormGroup check inline>
+														<Label check>
+															<Input
+																type='radio'
+																value='M'
+																name='gender'
+																checked={user.gender === 'M'}
+																onChange={this.handleChange}
+															/>{' '}
+															Male
+														</Label>
+													</FormGroup>
+													<FormGroup check inline>
+														<Label check>
+															<Input
+																type='radio'
+																value='F'
+																name='gender'
+																checked={user.gender === 'F'}
+																onChange={this.handleChange}
+															/>{' '}
+															Female
+														</Label>
+													</FormGroup>{' '}
+													{errors.gender && <Alert color='warning'>{errors.gender}</Alert>}
 												</FormGroup>
 											</Col>
 										</Row>
-									</>
-								)}
-								{unit.metric && (
-									<>
+
 										<Row form>
 											<Col md={6}>
-												<FormGroup inline>
-													<Label htmlFor='Height'>Height</Label>
+												{unit.US && (
+													<>
+														<FormGroup inline>
+															<Label htmlFor='Height'>Height</Label>
 
-													<Input
-														id='Height'
-														name='height'
-														value={user.height}
-														onChange={this.handleChange}
-														type='number'
-														placeHolder='cm'
-													/>
-													{errors.height && <Alert color='warning'>{errors.height}</Alert>}
-												</FormGroup>
+															<Input
+																id='Height'
+																name='height_ft'
+																value={user.height_ft}
+																onChange={this.handleChange}
+																type='number'
+																placeHolder='feet'
+															/>
+															{errors.height_ft && (
+																<Alert color='warning'>{errors.height_ft}</Alert>
+															)}
+														</FormGroup>
 
-												<FormGroup inline>
-													<Label htmlFor='weight'>Weight</Label>
+														<FormGroup inline>
+															<Input
+																id='Height'
+																name='height_in'
+																value={user.height_in}
+																onChange={this.handleChange}
+																type='number'
+																placeHolder='inches'
+															/>
+															{errors.height_in && (
+																<Alert color='warning'>{errors.height_in}</Alert>
+															)}
+														</FormGroup>
 
-													<Input
-														id='weight'
-														name='weight'
-														value={user.weight}
-														onChange={this.handleChange}
-														type='number'
-														placeHolder='kg'
-													/>
-													{errors.weight && <Alert color='warning'>{errors.weight}</Alert>}
-												</FormGroup>
+														<FormGroup inline>
+															<Label htmlFor='weight'>Weight</Label>
+
+															<Input
+																id='weight'
+																name='weight_pd'
+																value={user.weight_pd}
+																onChange={this.handleChange}
+																type='number'
+																placeHolder='pounds'
+															/>
+															{errors.weight_pd && (
+																<Alert color='warning'>{errors.weight_pd}</Alert>
+															)}
+														</FormGroup>
+													</>
+												)}
+
+												{unit.metric && (
+													<>
+														<FormGroup inline>
+															<Label htmlFor='Height'>Height</Label>
+
+															<Input
+																id='Height'
+																name='height'
+																value={user.height}
+																onChange={this.handleChange}
+																type='number'
+																placeHolder='cm'
+															/>
+															{errors.height && (
+																<Alert color='warning'>{errors.height}</Alert>
+															)}
+														</FormGroup>
+
+														<FormGroup inline>
+															<Label htmlFor='weight'>Weight</Label>
+
+															<Input
+																id='weight'
+																name='weight'
+																value={user.weight}
+																onChange={this.handleChange}
+																type='number'
+																placeHolder='kg'
+															/>
+															{errors.weight && (
+																<Alert color='warning'>{errors.weight}</Alert>
+															)}
+														</FormGroup>
+													</>
+												)}
+											</Col>
+											<Col md={6}>
+												{result.bmr && (
+													<Card>
+														<CardBody>
+															<CardSubtitle tag='h4' className='mb-2 text-center'>
+																BMR = {result.bmr} Calories/Day
+															</CardSubtitle>
+														</CardBody>
+													</Card>
+												)}
 											</Col>
 										</Row>
-									</>
-								)}
-								<Button onClick={this.handleClear}>Clear</Button>
-								<Button color='primary' onClick={this.handleSubmit}>
-									Submit
-								</Button>
-							</Form>
-						</Col>
-						<Col sm={4}>
-							{result.bmr && (
-								<Card>
-									<CardBody>
-										<CardTitle tag='h5'>Your BMR is</CardTitle>
-										<CardSubtitle tag='h6' className='mb-2 text-muted'>
-											BMR = {result.bmr} Calories/Day
-										</CardSubtitle>
-									</CardBody>
-								</Card>
-							)}
+										<Button onClick={this.handleClear}>Clear</Button>
+										<Button color='primary' onClick={this.handleSubmit}>
+											Submit
+										</Button>
+									</Form>
+								</CardBody>
+							</Card>
 						</Col>
 					</Row>
 				</Container>
