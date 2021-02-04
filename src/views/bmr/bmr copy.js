@@ -28,35 +28,18 @@ class Bmr extends Component {
 		errors: {},
 	};
 	schema = {
-		us: Joi.boolean().required(),
 		age: Joi.number().min(0).required().label('Age'),
 		gender: Joi.string().required().label('Gender'),
-		height: Joi.when('us', {
-			is: false,
-			then: Joi.number().min(0).required().label('Height'),
-		}),
-		height_ft: Joi.when('us', {
-			is: true,
-			then: Joi.number().min(0).required().label('Height in feet'),
-		}),
-		height_in: Joi.when('us', {
-			is: true,
-			then: Joi.number().min(0).max(12).required().label('Height in inches'),
-		}),
-		weight: Joi.when('us', {
-			is: false,
-			then: Joi.number().min(0).required().label('Weight'),
-		}),
-		weight_pd: Joi.when('us', {
-			is: true,
-			then: Joi.number().min(0).required().label('Weight'),
-		}),
+		height: Joi.number().min(0).required().label('Height'),
+		height_ft: Joi.number().min(0).required().label('Height in feet'),
+		height_in: Joi.number().min(0).max(12).required().label('Height in inches'),
+		weight: Joi.number().min(0).required().label('Weight'),
+		weight_pd: Joi.number().min(0).required().label('Weight'),
 	};
 	validate = () => {
 		const options = { abortEarly: false };
-		const user = { ...this.state.user };
-		user.us = this.state.unit.US;
-		const { error } = Joi.validate(user, this.schema, options);
+
+		const { error } = Joi.validate(this.state.user, this.schema, options);
 
 		if (!error) return null;
 
@@ -88,7 +71,7 @@ class Bmr extends Component {
 	handleSubmit = (e) => {
 		e.preventDefault();
 
-		const { result, unit } = this.state;
+		const { result } = this.state;
 		const errors = this.validate();
 
 		this.setState({ errors: errors || {} });
@@ -101,7 +84,6 @@ class Bmr extends Component {
 	handleChange = ({ currentTarget: input }) => {
 		const errors = { ...this.state.errors };
 		const errorMessage = this.validateProperty(input);
-
 		if (errorMessage) errors[input.name] = errorMessage;
 		else delete errors[input.name];
 
@@ -120,17 +102,42 @@ class Bmr extends Component {
 	};
 
 	handleUnitChange = (param) => {
-		const { unit } = this.state;
+		const { unit, user } = this.state;
 
 		if (param === 'US') {
 			unit.US = true;
 			unit.metric = false;
+			delete [user.height_ft, user.height_in, user.weight_pd];
+			if (user.height) {
+				const length = user.height / 2.54;
+				user.height_ft = Math.floor(length / 12);
+				user.height_in = Math.round(length - 12 * user.height_ft);
+			}
+			if (user.weight) {
+				user.weight_pd = Math.round(user.weight * 2.205);
+			}
 		} else {
 			unit.US = false;
 			unit.metric = true;
+			// delete [user.height, user.weight];
+
+			// if (user.height_ft || user.height_in) {
+			// 	// converting the ft-in height to cm
+			// 	user.height = (user.height_ft * 30.48 + user.height_in * 2.54).toFixed(2);
+			// }
+			// if (user.weight_pd) {
+			// 	user.weight = (user.weight_pd / 2.205).toFixed(2);
+			// }
+			if (user.weight) {
+				user.weight_pd = 0;
+			}
+			if (user.height) {
+				user.height_ft = 0;
+				user.height_in = 0;
+			}
 		}
-		this.handleClear();
-		this.setState({ unit });
+
+		this.setState({ unit, user });
 	};
 	handleClear = () => {
 		const user = { age: '', height: '', weight: '', gender: '', height_ft: '', height_in: '', weight_pd: '' };
