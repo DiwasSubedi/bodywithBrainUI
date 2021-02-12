@@ -17,8 +17,8 @@ import {
 	Col,
 } from 'reactstrap';
 import { Auth } from 'aws-amplify';
-import fulllogo from "../../assets/img/brand/PNG2.png"
-import fulllogo1 from "../../assets/img/brand/PNG3.png"
+import fulllogo from '../../assets/img/brand/PNG2.png';
+import fulllogo1 from '../../assets/img/brand/PNG3.png';
 class NavBar extends React.Component {
 	constructor(props) {
 		super(props);
@@ -54,9 +54,7 @@ class NavBar extends React.Component {
 					expand='lg'
 				>
 					<Container className='m-0' fluid={true}>
-						<NavbarBrand href='#pablo' onClick={(e) => e.preventDefault()}>
-							BODYWITHBRAIN
-						</NavbarBrand>
+						<NavbarBrand href='/admin/home'>BODYWITHBRAIN</NavbarBrand>
 						<Nav navbar>
 							<NavItem>
 								<NavLink href='/admin/bmr'>
