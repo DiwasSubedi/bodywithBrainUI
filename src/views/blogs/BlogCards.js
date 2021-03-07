@@ -81,7 +81,7 @@ class BlogCard extends React.Component {
 							</CardTitle>
 
 							<small className=' text-muted'>
-								by {blog.creadedBy} on {new Date(blog.lastUpdated).toDateString()}
+								by {blog.createdBy} on {new Date(blog.lastUpdated).toDateString()}
 							</small>
 							<CardText className=' mt-4'>
 								{/* 
