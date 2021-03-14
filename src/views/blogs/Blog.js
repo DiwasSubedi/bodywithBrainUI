@@ -39,6 +39,7 @@ import BlogCard from './BlogCards';
 import { Redirect } from 'react-router-dom';
 import LoadingSpinner from '../spinner/LoadingSpinner';
 import { CSSTransition } from 'react-transition-group';
+import SearchBox from '../../components/searchBox';
 
 import './BlogCard.css';
 class Blog extends React.Component {
@@ -52,6 +53,7 @@ class Blog extends React.Component {
 			allblogs: null,
 			allBlogElements: undefined,
 			show: false,
+			searchQuery: '',
 		};
 
 		this.getAllBlogs = this.getAllBlogs.bind(this);
@@ -119,7 +121,41 @@ class Blog extends React.Component {
 				console.log(error);
 			});
 	}
+
+	getSearchResult() {
+		var threeBlogArray = [];
+		var threeBlog = [];
+		const { searchQuery, allblogs } = this.state;
+		allblogs.forEach((blog, index) => {
+			if (threeBlog && threeBlog.length == 3) {
+				let copyOfThreeBlog = Array.from(threeBlog);
+				threeBlogArray.push(copyOfThreeBlog);
+				threeBlog.length = 0;
+			} else {
+				if (blog.content.includes(searchQuery) || blog.title.includes(searchQuery)) threeBlog.push(blog);
+			}
+			if (index == this.state.allblogs.length - 1 && threeBlog.length > 0) {
+				threeBlogArray.push(threeBlog);
+			}
+		});
+		var returnList = threeBlogArray.map((threeBlogs) => {
+			return <BlogCard threeBlogs={threeBlogs}></BlogCard>;
+		});
+		return returnList;
+	}
+
+	handleSearch = (query) => {
+		this.setState({ searchQuery: query });
+	};
+
 	render() {
+		const { searchQuery, allBlogElements, allblogs } = this.state;
+		var render_data = allBlogElements;
+
+		if (searchQuery) {
+			render_data = this.getSearchResult();
+		}
+
 		return (
 			<>
 				<Header />
@@ -132,6 +168,9 @@ class Blog extends React.Component {
 							<Row>
 								<Col>
 									<h3>&nbsp;&nbsp;BODYWITHBRAIN BLOGS</h3>
+								</Col>
+								<Col>
+									<SearchBox value={searchQuery} onChange={this.handleSearch} />
 								</Col>
 								<Col>
 									<Button
@@ -149,7 +188,7 @@ class Blog extends React.Component {
 								</Col>
 							</Row>
 							<Row>
-								<div className=' col'>{this.state.allBlogElements}</div>}
+								<div className=' col'>{render_data}</div>}
 							</Row>
 						</div>
 					)}
