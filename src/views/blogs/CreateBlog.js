@@ -222,14 +222,11 @@ class CreateBlog extends React.Component {
     }
     return (
       <>
-
-        <Header />
-        {/* Page content */}
-        <Container className=" mt--7 bg-gradient-info" fluid>
+        <Container className=" mt--7  " fluid>
           {/* Table */}
           <Row ><Col><h3>&nbsp;&nbsp;NEW BLOG</h3></Col></Row>
 
-          <Row><div className="col-2"></div><div className="col-9"><Form>
+          <Row className=" mt-7" ><div className="col-2"></div><div className="col-9"><Form>
             <h6 className="heading-small text-muted mb-4">
               Blog Information
                     </h6>
