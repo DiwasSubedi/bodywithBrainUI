@@ -142,8 +142,7 @@ class Bmr extends Component {
 		const { user, unit, errors, result } = this.state;
 		return (
 			<>
-				<Header />
-				<Container className=' mt--7 bg-gradient-info' fluid>
+				<Container className=' mt--7' fluid>
 					<Row className='justify-content-center'>
 						<Col lg='6' md='8'>
 							<div className='mb-5'>

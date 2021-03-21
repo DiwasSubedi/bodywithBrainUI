@@ -42,7 +42,7 @@ import 'react-quill/dist/quill.snow.css';
 import allblogs from "../../jsondata/blog.json";
 import LoadingSpinner from "../spinner/LoadingSpinner";
 
-class BlogDetail extends React.Component {
+class ViewBlog extends React.Component {
   state = {};
 constructor(props){
   super(props);
@@ -87,45 +87,27 @@ submitBlog(){
   render() {
     return (
       <>
-     
-        <Container className=" mt--7" fluid>
+        <Container className="mt--9" fluid>
           {/* Table */}
             {this.state.loading && <LoadingSpinner></LoadingSpinner>}
-          <Row ><Col><h3>&nbsp;&nbsp;BODYWITHBRAIN BLOGS</h3></Col><Col><Button type="button" onClick={()=>{
-            this.props.history.push({
-              pathname:"/admin/blog/new",
-              state: { blog: this.props.location.state.blog }
-            })
-            
-            ;}} 
-            
-            className="float-right mb-2" color="default"><span><i class="fas fa-edit"></i>&nbsp;Edit Blog</span></Button></Col></Row>
-          <Row>
+          <Row ><Col><h3>&nbsp;&nbsp;</h3></Col><Col>
+            </Col></Row>
+          <Row className="mt-2"> 
           <div className=" col-1"></div>
             <div className=" col">
-              {/* <h1>{this.props.location.state.title}</h1> */}
-              <Card className="bg-white text-dark border-0 p-1">
-
+              <Card className="bg-white text-dark border-0 p-1 bwbblogcard1">
                         <CardBody>
-                            
-                           
-                            <CardTitle className=" h1 mb-0 text-uppercase"><a href="">{this.props.location.state.blog.categories.join(" / ")}</a></CardTitle>
+                            <CardTitle className=" h1 mb-0 text-uppercase"><a>{this.props.location.state.blog.categories.join(" / ")}</a></CardTitle>
                             <hr/>
                             <CardTitle className=" h1 mb-0">{this.props.location.state.blog.title}</CardTitle>
                             <small className=" text-muted">
                                 by {this.props.location.state.blog.creadedBy} on {new Date(this.props.location.state.blog.createdOn).toDateString()}
                             </small>
                             <CardText className=" mt-4 container-fluid">
-                            
                             <div dangerouslySetInnerHTML={this.createMarkup()} />
                             </CardText>
                         </CardBody>
                     </Card>
-                <Button type="button" onClick={this.submitBlog} className="float-right mt-5 mb-2" color="default"><span><i class="fas fa-ok"></i>&nbsp;Submit</span></Button>
-
-                <h1></h1>
-               
-              
             </div>
             <div className="col-1"></div>
           </Row>
@@ -135,4 +117,4 @@ submitBlog(){
   }
 }
 
-export default BlogDetail;
+export default ViewBlog;

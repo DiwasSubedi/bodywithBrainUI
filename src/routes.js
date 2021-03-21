@@ -27,6 +27,7 @@ import CreateBlog from 'views/blogs/CreateBlog.js';
 import bmr from 'views/bmr/bmr';
 import home from 'views/homepage';
 import BlogDetail from 'views/blogs/BlogDetail';
+import ViewBlog from 'views/blogs/ViewBlog';
 var routes = [
 	{
 		path: '/index',
@@ -110,5 +111,11 @@ var routes = [
 		component: home,
 		layout: '/admin',
 	},
+	{
+		path: '/blog/view',
+		name: 'ViewBlog',
+		component: ViewBlog,
+		layout: '/admin',
+	}
 ];
 export default routes;

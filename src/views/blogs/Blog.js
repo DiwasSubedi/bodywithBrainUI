@@ -36,7 +36,7 @@ import {
 // core components
 import Header from 'components/Headers/Header.js';
 import BlogCard from './BlogCards';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import LoadingSpinner from '../spinner/LoadingSpinner';
 import { CSSTransition } from 'react-transition-group';
 import SearchBox from '../../components/searchBox';
@@ -55,7 +55,7 @@ class Blog extends React.Component {
 			show: false,
 			searchQuery: '',
 		};
-
+	
 		this.getAllBlogs = this.getAllBlogs.bind(this);
 	}
 
@@ -77,7 +77,7 @@ class Blog extends React.Component {
 			}
 		});
 		var returnList = threeBlogArray.map((threeBlogs) => {
-			return <BlogCard threeBlogs={threeBlogs}></BlogCard>;
+			return <BlogCard history={this.props.history} allblog={this.state.allblogs} threeBlogs={threeBlogs}></BlogCard>;
 		});
 		debugger;
 		return returnList;
@@ -158,9 +158,9 @@ class Blog extends React.Component {
 
 		return (
 			<>
-				<Header />
+				
 				{/* Page content */}
-				<Container className=' mt--7 bg-gradient-info' fluid>
+				<Container className='mt--7' fluid>
 					{/* Table */}
 					{this.state.loading && <LoadingSpinner />}
 					{!this.state.loading && (
